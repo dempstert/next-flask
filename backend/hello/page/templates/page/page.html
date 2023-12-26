@@ -1,0 +1,66 @@
+{% extends "layouts/layout.html" %}
+
+{% block title %}Tooltips{% endblock %}
+
+{% block body %}
+
+
+<div>
+    <h1> My Title</h1>
+    <hr>
+    <button id="tooltip-button" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
+        Hover for   
+    </button>
+</div>
+<br>
+
+<label class="relative inline-flex items-center mb-5 cursor-pointer">
+    <input id="tooltip-toggle" type="checkbox" value="" class="sr-only peer">
+    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Show tooltip when hovering?</span>
+</label>
+
+<div id="tooltip-default" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+    Tooltip content
+    <div class="tooltip-arrow" data-popper-arrow></div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tooltipToggle = document.getElementById('tooltip-toggle');
+        const tooltipButton = document.getElementById('tooltip-button');
+        const tooltip = document.getElementById('tooltip-default');
+    
+        let tooltipEnabled = false;
+    
+        function positionTooltip() {
+            const buttonRect = tooltipButton.getBoundingClientRect();
+            const tooltipRect = tooltip.getBoundingClientRect();
+    
+            // Position the tooltip below the button and centered
+            tooltip.style.top = `${buttonRect.bottom + window.scrollY}px`;
+            tooltip.style.left = `${buttonRect.left + window.scrollX + buttonRect.width/2 - tooltipRect.width/2}px`;
+        }
+    
+        tooltipToggle.addEventListener('change', function() {
+            tooltipEnabled = tooltipToggle.checked;
+            if (!tooltipEnabled) {
+                tooltip.classList.add('invisible', 'opacity-0');
+            }
+        });
+    
+        tooltipButton.addEventListener('mouseenter', function() {
+            if (tooltipEnabled) {
+                positionTooltip();
+                tooltip.classList.remove('invisible', 'opacity-0');
+                tooltip.classList.add('visible', 'opacity-100');
+            }
+        });
+    
+        tooltipButton.addEventListener('mouseleave', function() {
+            tooltip.classList.add('invisible', 'opacity-0');
+        });
+    });
+    
+</script>
+{% endblock %}
